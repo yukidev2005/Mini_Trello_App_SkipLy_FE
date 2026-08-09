@@ -27,7 +27,7 @@ export default function Header() {
   const user = getUserFromStorage();
 
   return (
-    <header className='w-full h-12 bg-[#2d3142] flex items-center justify-between px-3 sm:px-4 shrink-0'>
+    <header className='w-full fixed top-0 left-0 right-0 h-12 bg-[#2d3142] flex items-center justify-between px-3 sm:px-4 shrink-0'>
       {/* ── Left: grid icon + logo ── */}
       <div className='flex items-center gap-2'>
         {/* Grid / apps icon */}

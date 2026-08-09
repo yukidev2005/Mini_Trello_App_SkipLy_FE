@@ -1,20 +1,20 @@
-import { Outlet, useNavigate } from 'react-router';
+import { Outlet, Navigate } from 'react-router';
 import Header from '@/components/Header';
+import { storage } from '@/lib/storage';
 
 export default function MainLayout() {
-  const isAuth = localStorage.getItem('skipli_access_toke');
-  const navigate = useNavigate();
+  const token = storage.getToken();
 
-  if (!isAuth) {
-    navigate('/auth/login');
+  if (!token) {
+    return <Navigate to='/auth/login' replace />;
   }
 
   return (
-    <div className='flex flex-col min-h-dvh bg-[#f0f2f5]'>
+    <div className='relative min-h-dvh'>
       <Header />
-      <main className='flex-1'>
+      <div className='pt-12'>
         <Outlet />
-      </main>
+      </div>
     </div>
   );
 }

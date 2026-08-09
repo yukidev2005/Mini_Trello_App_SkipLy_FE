@@ -12,11 +12,3 @@ export interface SignupResponse {
   email: string;
   id: string;
 }
-
-export interface ApiResponse<T> {
-  message: string;
-  data: T;
-  statusCode: number;
-  timestamp: string;
-  path: string;
-}

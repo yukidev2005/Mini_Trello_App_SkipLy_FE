@@ -1,5 +1,6 @@
 import { baseUrl } from '@/api/baseUrl';
-import type { ApiResponse, UserInfo } from '@/lib/types/auth.types';
+import type { ApiResponse } from '@/lib/types';
+import type { UserInfo } from '@/lib/types/auth.types';
 
 export const signupApi = async (
   email: string,

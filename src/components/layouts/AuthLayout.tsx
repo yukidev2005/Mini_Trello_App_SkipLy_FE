@@ -1,13 +1,14 @@
-import { Outlet, useNavigate } from 'react-router';
+import { Outlet, Navigate } from 'react-router';
 import authLeftImg from '@/assets/auth_image.png';
 import authRightImg from '@/assets/hero.png';
+import { storage } from '@/lib/storage';
 
 export default function AuthLayout() {
-  const isAuth = localStorage.getItem('skipli_access_toke');
-  const navigate = useNavigate();
+  const token = storage.getToken();
 
-  if (isAuth) {
-    navigate('/boards');
+  // Đã đăng nhập → redirect sang boards
+  if (token) {
+    return <Navigate to='/boards' replace />;
   }
 
   return (
