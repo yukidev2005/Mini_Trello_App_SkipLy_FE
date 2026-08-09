@@ -1,12 +1,32 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import BoardItem from '@/modules/Boards/BoardItem';
 import CreateBoardDialog from '@/modules/Boards/CreateBoarđialog';
 import { useGetAllBoardQuery } from '@/modules/Boards/querys';
 import { BarChart2, Users } from 'lucide-react';
+import { clientSocket } from '@/main';
+import { useQueryClient } from '@tanstack/react-query';
+import PendingInvitationsPopover from './PendingInvitationsPopover';
 
 export default function BoardsPage() {
   const { data } = useGetAllBoardQuery();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const handleInvalidateBoards = () => {
+      queryClient.invalidateQueries({ queryKey: ['boards'] });
+    };
+
+    clientSocket.on('create-board', handleInvalidateBoards);
+    clientSocket.on('update-board', handleInvalidateBoards);
+    clientSocket.on('delete-board', handleInvalidateBoards);
+
+    return () => {
+      clientSocket.off('create-board', handleInvalidateBoards);
+      clientSocket.off('update-board', handleInvalidateBoards);
+      clientSocket.off('delete-board', handleInvalidateBoards);
+    };
+  }, [queryClient]);
 
   return (
     <div className='w-full min-h-[calc(100vh-48px)] bg-[#2b303c] text-white p-8 flex gap-12 font-sans'>
@@ -33,10 +53,15 @@ export default function BoardsPage() {
 
       {/* ── Right Main Content Area ── */}
       <main className='flex-1'>
-        {/* Section title */}
-        <h2 className='text-xs font-semibold text-gray-400 tracking-wider uppercase mb-4'>
-          YOURWORKSPACES
-        </h2>
+        {/* Section title & Invitations */}
+        <div className='flex items-center justify-between mb-4'>
+          <h2 className='text-xs font-semibold text-gray-400 tracking-wider uppercase'>
+            YOUR WORKSPACES
+          </h2>
+
+          {/* Pending Invitations Popover Bell */}
+          <PendingInvitationsPopover />
+        </div>
 
         {/* Board Cards Grid */}
         <div className='flex flex-wrap gap-4 items-start'>
